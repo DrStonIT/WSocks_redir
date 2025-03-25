@@ -1,20 +1,15 @@
-from fastapi import FastAPI
-from starlette.responses import RedirectResponse
+from fastapi import FastAPI, Request, Query
+from fastapi.responses import RedirectResponse
 import urllib.parse
 
 app = FastAPI()
 
-# Главная страница (можно убрать)
 @app.get("/")
-def home():
-    return {"message": "Этот сервер выполняет редирект для V2Ray"}
+async def home():
+    return {"message": "V2Ray Redirect Server is running!"}
 
-@app.get("/{encoded_key}")
-def redirect(encoded_key: str):
-    # Декодируем ключ обратно в исходный формат
-    key = urllib.parse.unquote(encoded_key)
-
-    # Формируем корректную ссылку для V2RayTun
-    new_url = f"v2raytun://import/{key}"
-    
-    return RedirectResponse(url=new_url)
+@app.get("/")
+def redirect_v2ray(key: str = Query(..., description="Encoded V2Ray Key")):
+    decoded_key = urllib.parse.unquote(key)  # Декодируем ключ
+    new_url = f"v2raytun://import/{decoded_key}"  # Формируем правильную ссылку
+    return RedirectResponse(url=new_url) 
