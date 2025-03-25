@@ -1,19 +1,15 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import RedirectResponse
+from fastapi import FastAPI
+from starlette.responses import RedirectResponse
 
 app = FastAPI()
 
+# Главная страница (можно убрать)
 @app.get("/")
-async def home():
-    return {"message": "V2Ray Redirect Server is running!"}
+def home():
+    return {"message": "Этот сервер выполняет редирект для V2Ray"}
 
-@app.get("/redirect")
-async def redirect_v2ray(request: Request):
-    v2ray_link = request.query_params.get("v2ray_link")
-
-    if not v2ray_link:
-        return {"error": "No V2Ray link provided"}
-
-    return RedirectResponse(url=v2ray_link)
-
-# Запускаем сервер: uvicorn redirect_server:app --host 0.0.0.0 --port 8080
+# Настраиваем редирект
+@app.get("/{path:path}")
+def redirect(path: str):
+    new_url = f"v2raytun://import/https://de-1.wsocks.ru:2096/SubWSocks_VPN_DE_FRA-1/{path}"
+    return RedirectResponse(url=new_url)
