@@ -8,7 +8,6 @@
 <body>
     <p>Перенаправление в приложение...</p>
     <div id="debug"></div>
-    <button id="redirectBtn" style="display:none;">Открыть в v2raytun</button>
     <script>
         const debug = document.getElementById('debug');
         debug.innerHTML = "Скрипт запущен<br>";
@@ -22,19 +21,26 @@
             document.body.innerHTML = "<p>Ошибка: ключ не найден в URL.</p>";
         } else {
             const decodedKey = decodeURIComponent(encodedKey);
-            const redirectUrl = `v2ray://import/${decodedKey}`;
-            debug.innerHTML += `Перенаправляю на: ${redirectUrl}<br>`;
+            // Пробуем разные схемы
+            const schemes = [
+                `v2raytun://import/${decodedKey}`,  // Оригинальная схема
+                `v2ray://import/${decodedKey}`,     // Альтернатива для v2rayNG
+                `vless://${decodedKey}`,
+                `v2raytun://${decodedKey}`,
+                `v2ray://${decodedKey}`,            // Прямая vless-схема
+            ];
 
-            // Пробуем автоматический редирект
-            window.location.href = redirectUrl;
+            debug.innerHTML += "Пробуем схемы:<br>";
+            schemes.forEach((url, index) => {
+                debug.innerHTML += `<a href="${url}" id="link${index}">Схема ${index + 1}: ${url}</a><br>`;
+            });
 
-            // Если не сработало, показываем кнопку
+            // Автоматический редирект на первую схему
+            window.location.href = schemes[0];
+
             setTimeout(() => {
-                if (document.location.href === window.location.href) { // Проверяем, остались ли на странице
-                    debug.innerHTML += "Автоматический редирект не сработал<br>";
-                    const btn = document.getElementById('redirectBtn');
-                    btn.style.display = 'block';
-                    btn.onclick = () => window.location.href = redirectUrl;
+                if (document.location.href === window.location.href) {
+                    debug.innerHTML += "Автоматический редирект не сработал. Выберите схему выше вручную.<br>";
                 }
             }, 1000);
         }
