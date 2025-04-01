@@ -22,7 +22,7 @@
             document.body.innerHTML = "<p>Ошибка: ключ не найден в URL.</p>";
         } else {
             const decodedKey = decodeURIComponent(encodedKey);
-            const redirectUrl = `v2raytun://import/${decodedKey}`;
+            const redirectUrl = `v2ray://import/${decodedKey}`;
             debug.innerHTML += `Перенаправляю на: ${redirectUrl}<br>`;
 
             // Пробуем автоматический редирект
