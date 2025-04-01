@@ -8,34 +8,36 @@
 <body>
     <p>Перенаправление в приложение...</p>
     <div id="debug"></div>
+    <button id="redirectBtn" style="display:none;">Открыть в v2raytun</button>
     <script>
-        // Оборачиваем в функцию, чтобы избежать проблем с return
-        function handleRedirect() {
-            const debug = document.getElementById('debug');
-            debug.innerHTML = "Скрипт запущен<br>";
+        const debug = document.getElementById('debug');
+        debug.innerHTML = "Скрипт запущен<br>";
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const encodedKey = urlParams.get('key');
-            debug.innerHTML += `Получен ключ: ${encodedKey || 'нет ключа'}<br>`;
+        const urlParams = new URLSearchParams(window.location.search);
+        const encodedKey = urlParams.get('key');
+        debug.innerHTML += `Получен ключ: ${encodedKey || 'нет ключа'}<br>`;
 
-            if (!encodedKey) {
-                debug.innerHTML += "Ошибка: ключ не передан<br>";
-                document.body.innerHTML = "<p>Ошибка: ключ не найден в URL.</p>";
-                return; // Теперь return легален, так как внутри функции
-            }
-
+        if (!encodedKey) {
+            debug.innerHTML += "Ошибка: ключ не передан<br>";
+            document.body.innerHTML = "<p>Ошибка: ключ не найден в URL.</p>";
+        } else {
             const decodedKey = decodeURIComponent(encodedKey);
             const redirectUrl = `v2raytun://import/${decodedKey}`;
             debug.innerHTML += `Перенаправляю на: ${redirectUrl}<br>`;
+
+            // Пробуем автоматический редирект
             window.location.href = redirectUrl;
 
+            // Если не сработало, показываем кнопку
             setTimeout(() => {
-                debug.innerHTML += "Редирект не сработал. Проверь v2raytun или браузер.<br>";
-            }, 2000);
+                if (document.location.href === window.location.href) { // Проверяем, остались ли на странице
+                    debug.innerHTML += "Автоматический редирект не сработал<br>";
+                    const btn = document.getElementById('redirectBtn');
+                    btn.style.display = 'block';
+                    btn.onclick = () => window.location.href = redirectUrl;
+                }
+            }, 1000);
         }
-
-        // Запускаем функцию
-        handleRedirect();
     </script>
 </body>
 </html>
