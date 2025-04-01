@@ -24,10 +24,10 @@
             // Пробуем разные схемы
             const schemes = [
                 `v2raytun://import/${decodedKey}`,  // Оригинальная схема
-                `v2ray://import/${decodedKey}`,     // Альтернатива для v2rayNG
+                `v2rayng://import/${decodedKey}`,     // Альтернатива для v2rayNG
                 `vless://${decodedKey}`,
                 `v2raytun://${decodedKey}`,
-                `v2ray://${decodedKey}`,            // Прямая vless-схема
+                `v2rayng://${decodedKey}`,            // Прямая vless-схема
             ];
 
             debug.innerHTML += "Пробуем схемы:<br>";
