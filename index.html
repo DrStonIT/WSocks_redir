@@ -7,42 +7,14 @@
 </head>
 <body>
     <p>Перенаправление в приложение...</p>
-    <div id="debug"></div>
     <script>
-        const debug = document.getElementById('debug');
-        debug.innerHTML = "Скрипт запущен<br>";
-
         const urlParams = new URLSearchParams(window.location.search);
         const encodedKey = urlParams.get('key');
-        debug.innerHTML += `Получен ключ: ${encodedKey || 'нет ключа'}<br>`;
-
         if (!encodedKey) {
-            debug.innerHTML += "Ошибка: ключ не передан<br>";
             document.body.innerHTML = "<p>Ошибка: ключ не найден в URL.</p>";
         } else {
             const decodedKey = decodeURIComponent(encodedKey);
-            // Пробуем разные схемы
-            const schemes = [
-                `v2raytun://import/${decodedKey}`,  // Оригинальная схема
-                `v2rayng://import/${decodedKey}`,     // Альтернатива для v2rayNG
-                `vless://${decodedKey}`,
-                `v2raytun://${decodedKey}`,
-                `v2rayng://${decodedKey}`,            // Прямая vless-схема
-            ];
-
-            debug.innerHTML += "Пробуем схемы:<br>";
-            schemes.forEach((url, index) => {
-                debug.innerHTML += `<a href="${url}" id="link${index}">Схема ${index + 1}: ${url}</a><br>`;
-            });
-
-            // Автоматический редирект на первую схему
-            window.location.href = schemes[0];
-
-            setTimeout(() => {
-                if (document.location.href === window.location.href) {
-                    debug.innerHTML += "Автоматический редирект не сработал. Выберите схему выше вручную.<br>";
-                }
-            }, 1000);
+            window.location.href = `v2raytun://import/${decodedKey}`;
         }
     </script>
 </body>
