@@ -9,37 +9,33 @@
     <p>Перенаправление в приложение...</p>
     <div id="debug"></div>
     <script>
-        const debugDiv = document.getElementById('debug');
-        try {
-            debugDiv.innerHTML += "Запуск скрипта...<br>";
-            
+        // Оборачиваем в функцию, чтобы избежать проблем с return
+        function handleRedirect() {
+            const debug = document.getElementById('debug');
+            debug.innerHTML = "Скрипт запущен<br>";
+
             const urlParams = new URLSearchParams(window.location.search);
-            debugDiv.innerHTML += `Параметры URL: ${window.location.search}<br>`;
-            
             const encodedKey = urlParams.get('key');
-            debugDiv.innerHTML += `Закодированный ключ: ${encodedKey}<br>`;
-            
+            debug.innerHTML += `Получен ключ: ${encodedKey || 'нет ключа'}<br>`;
+
             if (!encodedKey) {
+                debug.innerHTML += "Ошибка: ключ не передан<br>";
                 document.body.innerHTML = "<p>Ошибка: ключ не найден в URL.</p>";
-                debugDiv.innerHTML += "Ключ отсутствует.<br>";
-                return;
+                return; // Теперь return легален, так как внутри функции
             }
 
             const decodedKey = decodeURIComponent(encodedKey);
-            debugDiv.innerHTML += `Декодированный ключ: ${decodedKey}<br>`;
-            
             const redirectUrl = `v2raytun://import/${decodedKey}`;
-            debugDiv.innerHTML += `Редирект на: ${redirectUrl}<br>`;
-            
+            debug.innerHTML += `Перенаправляю на: ${redirectUrl}<br>`;
             window.location.href = redirectUrl;
-            
-            // Проверка, если редирект не сработал
+
             setTimeout(() => {
-                debugDiv.innerHTML += "Редирект не выполнен. Проверьте v2raytun или браузер.<br>";
+                debug.innerHTML += "Редирект не сработал. Проверь v2raytun или браузер.<br>";
             }, 2000);
-        } catch (e) {
-            debugDiv.innerHTML += `Ошибка: ${e.message}<br>`;
         }
+
+        // Запускаем функцию
+        handleRedirect();
     </script>
 </body>
 </html>
