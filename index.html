@@ -14,7 +14,6 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const encodedSub = urlParams.get('sub');
-        const customName = urlParams.get('name') || 'DefaultSubscription';
 
         if (!encodedSub) {
             document.body.innerHTML = "<p>Ошибка: ссылка на подписку не найдена в URL.</p>";
