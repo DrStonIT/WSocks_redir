@@ -1,20 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>V2RayTun Redirect</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding-top: 50px; }
+        p { font-size: 18px; color: #333; }
+    </style>
 </head>
 <body>
     <p>Перенаправление в приложение...</p>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const encodedKey = urlParams.get('key');
-        if (!encodedKey) {
-            document.body.innerHTML = "<p>Ошибка: ключ не найден в URL.</p>";
+        const encodedSub = urlParams.get('sub');
+        const customName = urlParams.get('name') || 'DefaultSubscription';
+
+        if (!encodedSub) {
+            document.body.innerHTML = "<p>Ошибка: ссылка на подписку не найдена в URL.</p>";
         } else {
-            const decodedKey = decodeURIComponent(encodedKey);
-            window.location.href = `v2raytun://import-sub?url=${decodedKey}`;
+            const subscriptionLink = decodeURIComponent(encodedSub);
+            // Формируем deep link с названием (если v2raytun поддерживает)
+            window.location.href = `v2raytun://import-sub?url=${encodeURIComponent(subscriptionLink)}&name=${encodeURIComponent(customName)}`;
         }
     </script>
 </body>
