@@ -14,7 +14,7 @@
             document.body.innerHTML = "<p>Ошибка: ключ не найден в URL.</p>";
         } else {
             const decodedKey = decodeURIComponent(encodedKey);
-            window.location.href = `v2raytun://import-sub?url=${decodedKey}`;
+            window.location.href = `v2raytun://import/${decodedKey}`;
         }
     </script>
 </body>
