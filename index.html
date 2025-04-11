@@ -1,23 +1,21 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V2RayTun Direct Redirect Test</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding-top: 50px; }
-        p { font-size: 18px; color: #333; }
-    </style>
+    <title>V2RayTun Redirect</title>
 </head>
 <body>
     <p>Перенаправление в приложение...</p>
     <script>
-        // Получаем параметры из URL
         const urlParams = new URLSearchParams(window.location.search);
-        const subscriptionLink = urlParams.get('sub') || 'https://de-3.wsocks.ru:2096/SubWSocks_VPN_DE_FRA-3/xk7p9mnb4q2j5v8r#ufggfgafagcbcgsa'; // Тестовая ссылка по умолчанию
-
-        // Прямой редирект на импорт в v2raytun
-        window.location.href = `v2raytun://import-sub?url=${encodeURIComponent(subscriptionLink)}`;
+        const encodedKey = urlParams.get('key');
+        if (!encodedKey) {
+            document.body.innerHTML = "<p>Ошибка: ключ не найден в URL.</p>";
+        } else {
+            const decodedKey = decodeURIComponent(encodedKey);
+            window.location.href = `v2raytun://import/${decodedKey}`;
+        }
     </script>
 </body>
 </html>
