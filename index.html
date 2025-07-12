@@ -14,7 +14,14 @@
             document.body.innerHTML = "<p>Ошибка: ключ не найден в URL.</p>";
         } else {
             const decodedKey = decodeURIComponent(encodedKey);
-            window.location.href = `v2raytun://import/${decodedKey}`;
+            // Проверяем, что ключ начинается с https://
+            if (decodedKey.startsWith('https://')) {
+                window.location.href = `v2raytun://import/${encodeURIComponent(decodedKey)}`;
+                // Если v2raytun ожидает другой формат, например, subscribe, замените на:
+                // window.location.href = `v2raytun://subscribe/${encodeURIComponent(decodedKey)}`;
+            } else {
+                document.body.innerHTML = "<p>Ошибка: некорректный формат ключа.</p>";
+            }
         }
     </script>
 </body>
